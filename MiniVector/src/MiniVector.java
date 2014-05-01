@@ -55,21 +55,21 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		}
 		return true;
 	}
-
+ 
 	public E firstElement() throws NoSuchElementException {
 
 		if (size == 0)
 			throw new NoSuchElementException();
-		@SuppressWarnings("unchecked")
+
 		final E first = (E) list[0];
 		return first;
 	}
-
+    
 	public E lastElement() throws NoSuchElementException {
 
 		if (size == 0)
 			throw new NoSuchElementException();
-		@SuppressWarnings("unchecked")
+
 		final E last = (E) list[size - 1];
 		return last;
 	}
@@ -88,7 +88,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	public E remove(int index) throws ArrayIndexOutOfBoundsException {
 
 		throwException(index);
-		@SuppressWarnings("unchecked")
+		
 		final E temp = (E) list[index];
 
 		for (int i = index; i < size; ++i)
@@ -96,8 +96,23 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		return temp;
 	}
-
-	
+    @Override
+	public boolean remove(Object obj){
+		
+		int position = 0;
+		
+		while(position < size && !this.compareTo(position , obj) )
+			position++;
+		
+		if(position < size){
+			System.err.println(position);
+			for (int i = position; i < size; ++i)
+				list[i] = list[i + 1];
+		--size; 	
+		return true;	
+		}
+		return false;
+	}
 
 	public void removeElementAt(int index)
 			throws ArrayIndexOutOfBoundsException {
@@ -125,14 +140,14 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		list[index] = obj;
 	}
-
+    
 	private void throwException(int index) {
 
 		if (index < 0 || index >= size)
 			throw new ArrayIndexOutOfBoundsException(index);
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private E[] grow() {
 
 		MiniVector<E> temp = new MiniVector<>(capacity * 2);
@@ -142,7 +157,15 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		return (E[]) temp.list;
 	}
-
+	/*
+	 * This is magic do not touch 
+	 * Work around comparing to to generic types  
+	 */
+    private boolean compareTo(int index , Object obj){
+    	
+    	
+    	return list[index].equals(obj);
+    }
 	private void copy(Object[] target, Object[] original, int position, int size) {
 
 		if (position != size) {
@@ -152,4 +175,5 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	}
 
 	
+
 }
