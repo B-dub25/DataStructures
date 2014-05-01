@@ -33,7 +33,6 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	public E get(int index) throws IndexOutOfBoundsException {
 
 		throwException(index);
-		
 		@SuppressWarnings("unchecked")
 		final E temp = (E) list[index];
 
@@ -89,9 +88,13 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	public E remove(int index) throws ArrayIndexOutOfBoundsException{
 		
 		throwException(index);
+        @SuppressWarnings("unchecked")
+		final E temp = (E)list[index];
 		
-	   
-		return (E)list[0];	
+        for(int i = index; i < size; ++i)
+    		list[i] = list[i+1];
+			
+		return temp;	
 	}
     public void removeElementAt(int index) throws ArrayIndexOutOfBoundsException{
     	
@@ -142,5 +145,22 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		}
 	}
 
-	
+	public static void main(String[] args) {
+		MiniVector<Integer> array = new MiniVector<>(5);
+        
+		array.add(1);
+		array.add(2);
+		array.add(3);
+		array.add(4);
+		array.add(5);
+		array.add(6);
+		array.add(7);
+		array.add(0, 16);
+        array.removeElementAt(14);
+		for (int i = 0; i < array.size; ++i)
+			System.out.println(array.get(i));
+		
+		//System.out.println(array.lastElement());
+	}
+
 }
