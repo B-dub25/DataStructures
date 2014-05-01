@@ -1,10 +1,10 @@
-
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
+import java.util.Vector;
 
 public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		RandomAccess, Serializable {
@@ -30,8 +30,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		list = (E[]) Arrays.copyOf(list, capacity, Object[].class);
 	}
 
-	
-    // Setters 
+	// Setters
 	@Override
 	public boolean add(E element) {
 
@@ -43,7 +42,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void add(int index, E element) throws ArrayIndexOutOfBoundsException {
 
@@ -62,22 +61,46 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		list[index] = obj;
 	}
-	//Getters
+
+	public void trimToSize() {
+		capacity = size;
+	}
+
+	// Getters
 	@Override
 	public E get(int index) throws IndexOutOfBoundsException {
 
 		throwException(index);
-		
+
 		final E temp = (E) list[index];
 		return temp;
 	}
 
 	@Override
+	public int lastIndexOf(Object obj) {
+
+		int position = -1;
+		for (int i = 0; i < size; ++i)
+			if (list[i].equals(obj))
+				position = i;
+		return position;
+	}
+
+	public int lastIndexOf(Object obj, int index) {
+
+		int position = -1;
+		for (int i = index; i > 0; --i)
+			if (list[i].equals(obj))
+				position = i;
+		return position;
+	}
+
+	@Override
 	public int size() {
-		
+
 		return size;
 	}
-	
+
 	public int capacity() {
 		return capacity;
 	}
@@ -90,7 +113,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		final E first = (E) list[0];
 		return first;
 	}
-    
+
 	public E lastElement() throws NoSuchElementException {
 
 		if (size == 0)
@@ -100,11 +123,11 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		return last;
 	}
 
-	// Modifiers 
+	// Deleter(s)
 	public E remove(int index) throws ArrayIndexOutOfBoundsException {
 
 		throwException(index);
-		
+
 		final E temp = (E) list[index];
 
 		for (int i = index; i < size; ++i)
@@ -112,20 +135,21 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		return temp;
 	}
-    @Override
-	public boolean remove(Object obj){
-		
+
+	@Override
+	public boolean remove(Object obj) {
+
 		int position = 0;
-		
-		while(position < size &&  !list[position].equals(obj) )
+
+		while (position < size && !list[position].equals(obj))
 			position++;
-		
-		if(position < size){
+
+		if (position < size) {
 			System.err.println(position);
 			for (int i = position; i < size; ++i)
 				list[i] = list[i + 1];
-		--size; 	
-		return true;	
+			--size;
+			return true;
 		}
 		return false;
 	}
@@ -138,20 +162,47 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 			list[i] = list[i + 1];
 		--size;
 	}
+
 	// Helpers
 	public void ensureCapacity(int minCapacity) {
 
 		if (minCapacity > capacity)
 			list = grow();
 	}
-	// Helper and private 
+	@Override
+    public List<E> subList(int fromIndex, int toIndex){
+    	
+		throwException(fromIndex);
+		throwException(toIndex);
+		if(fromIndex > toIndex)
+			throw new IllegalArgumentException("fromIndex is larger than toIndex ");
+		
+		List<E> link = new MiniVector<>();
+    	for(int i = fromIndex; i < toIndex; ++i){
+    		 link.add(list[i]);
+    	}
+    	
+    return link;	
+    }
+	@Override
+	public String toString() {
+
+		StringBuilder builder = new StringBuilder("[");
+		builder.append(list[0]);
+		for (int i = 1; i < size; i++) {
+			builder.append(", ");
+			builder.append(list[i]);
+		}
+
+		return String.valueOf(builder.append("]"));
+	}
+
 	private void throwException(int index) {
 
 		if (index < 0 || index >= size)
 			throw new ArrayIndexOutOfBoundsException(index);
 	}
 
-	
 	private E[] grow() {
 
 		MiniVector<E> temp = new MiniVector<>(capacity * 2);
@@ -161,7 +212,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		return (E[]) temp.list;
 	}
-	
+
 	private void copy(Object[] target, Object[] original, int position, int size) {
 
 		if (position != size) {
