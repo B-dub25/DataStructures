@@ -29,21 +29,8 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		list = (E[]) Arrays.copyOf(list, capacity, Object[].class);
 	}
 
-	@Override
-	public E get(int index) throws IndexOutOfBoundsException {
-
-		throwException(index);
-		
-		final E temp = (E) list[index];
-		return temp;
-	}
-
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return size;
-	}
-
+	
+    // Setters 
 	@Override
 	public boolean add(E element) {
 
@@ -55,7 +42,45 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		}
 		return true;
 	}
- 
+	
+	@Override
+	public void add(int index, E element) throws ArrayIndexOutOfBoundsException {
+
+		throwException(index);
+		for (int i = size; i > index; --i)
+			list[i] = list[i - 1];
+		list[index] = element;
+		size++;
+
+	}
+
+	public void setElementAt(E obj, int index)
+			throws ArrayIndexOutOfBoundsException {
+
+		throwException(index);
+
+		list[index] = obj;
+	}
+	//Getters
+	@Override
+	public E get(int index) throws IndexOutOfBoundsException {
+
+		throwException(index);
+		
+		final E temp = (E) list[index];
+		return temp;
+	}
+
+	@Override
+	public int size() {
+		
+		return size;
+	}
+	
+	public int capacity() {
+		return capacity;
+	}
+
 	public E firstElement() throws NoSuchElementException {
 
 		if (size == 0)
@@ -74,17 +99,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		return last;
 	}
 
-	@Override
-	public void add(int index, E element) throws ArrayIndexOutOfBoundsException {
-
-		throwException(index);
-		for (int i = size; i > index; --i)
-			list[i] = list[i - 1];
-		list[index] = element;
-		size++;
-
-	}
-
+	// Modifiers 
 	public E remove(int index) throws ArrayIndexOutOfBoundsException {
 
 		throwException(index);
@@ -122,25 +137,13 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 			list[i] = list[i + 1];
 		--size;
 	}
-	
+	// Helpers
 	public void ensureCapacity(int minCapacity) {
 
 		if (minCapacity > capacity)
 			list = grow();
 	}
-
-	public int capacity() {
-		return capacity;
-	}
-
-	public void setElementAt(E obj, int index)
-			throws ArrayIndexOutOfBoundsException {
-
-		throwException(index);
-
-		list[index] = obj;
-	}
-    
+	// Helper and private 
 	private void throwException(int index) {
 
 		if (index < 0 || index >= size)
