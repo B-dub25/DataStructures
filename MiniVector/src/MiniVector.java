@@ -1,3 +1,4 @@
+
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -116,7 +117,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		
 		int position = 0;
 		
-		while(position < size && !this.compareTo(position , obj) )
+		while(position < size &&  !list[position].equals(obj) )
 			position++;
 		
 		if(position < size){
@@ -160,15 +161,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		return (E[]) temp.list;
 	}
-	/*
-	 * This is magic do not touch 
-	 * Work around comparing to to generic types  
-	 */
-    private boolean compareTo(int index , Object obj){
-    	
-    	
-    	return list[index].equals(obj);
-    }
+	
 	private void copy(Object[] target, Object[] original, int position, int size) {
 
 		if (position != size) {
