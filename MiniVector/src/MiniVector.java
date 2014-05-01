@@ -12,7 +12,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	 */
 
 	private static final long serialVersionUID = -6535583477063192586L;
-	private Object[] list;
+	private E[] list;
 	private int size;
 	private int capacity;
 
@@ -22,7 +22,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 	@SuppressWarnings("unchecked")
 	public MiniVector(int size) {
-		
+
 		this.size = 0;
 		capacity = size;
 		list = (E[]) new Object[capacity];
@@ -33,9 +33,8 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	public E get(int index) throws IndexOutOfBoundsException {
 
 		throwException(index);
-		@SuppressWarnings("unchecked")
+		
 		final E temp = (E) list[index];
-
 		return temp;
 	}
 
@@ -71,7 +70,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		if (size == 0)
 			throw new NoSuchElementException();
 		@SuppressWarnings("unchecked")
-		final E last = (E) list[size-1];
+		final E last = (E) list[size - 1];
 		return last;
 	}
 
@@ -79,30 +78,36 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	public void add(int index, E element) throws ArrayIndexOutOfBoundsException {
 
 		throwException(index);
-		for(int i = size; i > index; --i)
-			list[i] = list[i-1];
+		for (int i = size; i > index; --i)
+			list[i] = list[i - 1];
 		list[index] = element;
-		
+		size++;
+
+	}
+
+	public E remove(int index) throws ArrayIndexOutOfBoundsException {
+
+		throwException(index);
+		@SuppressWarnings("unchecked")
+		final E temp = (E) list[index];
+
+		for (int i = index; i < size; ++i)
+			list[i] = list[i + 1];
+
+		return temp;
+	}
+
+	
+
+	public void removeElementAt(int index)
+			throws ArrayIndexOutOfBoundsException {
+
+		throwException(index);
+		for (int i = index; i < size; ++i)
+			list[i] = list[i + 1];
+		--size;
 	}
 	
-	public E remove(int index) throws ArrayIndexOutOfBoundsException{
-		
-		throwException(index);
-        @SuppressWarnings("unchecked")
-		final E temp = (E)list[index];
-		
-        for(int i = index; i < size; ++i)
-    		list[i] = list[i+1];
-			
-		return temp;	
-	}
-    public void removeElementAt(int index) throws ArrayIndexOutOfBoundsException{
-    	
-    	throwException(index);
-    	for(int i = index; i < size; ++i)
-    		list[i] = list[i+1];
-    	--size;
-    }
 	public void ensureCapacity(int minCapacity) {
 
 		if (minCapacity > capacity)
@@ -112,20 +117,21 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	public int capacity() {
 		return capacity;
 	}
-	
-    public void setElementAt(E obj, int index)throws ArrayIndexOutOfBoundsException{
-    	
-    	throwException(index);
-    	
-    	list[index] = obj;  	
-    }
-    
-    private void throwException(int index){
-    	
-    	if( index < 0 || index >= size)
-    		throw new ArrayIndexOutOfBoundsException(index);
-    }
-    
+
+	public void setElementAt(E obj, int index)
+			throws ArrayIndexOutOfBoundsException {
+
+		throwException(index);
+
+		list[index] = obj;
+	}
+
+	private void throwException(int index) {
+
+		if (index < 0 || index >= size)
+			throw new ArrayIndexOutOfBoundsException(index);
+	}
+
 	@SuppressWarnings("unchecked")
 	private E[] grow() {
 
@@ -145,22 +151,5 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		}
 	}
 
-	public static void main(String[] args) {
-		MiniVector<Integer> array = new MiniVector<>(5);
-        
-		array.add(1);
-		array.add(2);
-		array.add(3);
-		array.add(4);
-		array.add(5);
-		array.add(6);
-		array.add(7);
-		array.add(0, 16);
-        array.removeElementAt(14);
-		for (int i = 0; i < array.size; ++i)
-			System.out.println(array.get(i));
-		
-		//System.out.println(array.lastElement());
-	}
-
+	
 }
