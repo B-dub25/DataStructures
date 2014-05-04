@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
-import java.util.Vector;
 
 public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		RandomAccess, Serializable {
@@ -13,7 +12,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 	 */
 
 	private static final long serialVersionUID = -6535583477063192586L;
-	private E[] list;
+	private transient E[] list;
 	private int size;
 	private int capacity;
 
@@ -29,7 +28,15 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		list = (E[]) new Object[capacity];
 		list = (E[]) Arrays.copyOf(list, capacity, Object[].class);
 	}
-
+    
+	public MiniVector(MiniVector<E> vect){
+    	
+    	this.size = vect.size;
+    	this.capacity = vect.capacity;
+    	copy(list, vect.list, 0, size/2);
+    	copy(list, vect.list, size/2, size);
+    
+    }
 	// Setters
 	@Override
 	public boolean add(E element) {
@@ -53,7 +60,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		size++;
 
 	}
-
+    
 	public void setElementAt(E obj, int index)
 			throws ArrayIndexOutOfBoundsException {
 
@@ -141,9 +148,8 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		int position = 0;
 
-		while (position < size && !list[position].equals(obj))
-			position++;
-
+		while (position < size && !list[position++].equals(obj) )	
+			
 		if (position < size) {
 			System.err.println(position);
 			for (int i = position; i < size; ++i)
@@ -168,6 +174,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		if (minCapacity > capacity)
 			list = grow();
+		
 	}
 	@Override
     public List<E> subList(int fromIndex, int toIndex){
@@ -175,7 +182,7 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 		throwException(fromIndex);
 		throwException(toIndex);
 		if(fromIndex > toIndex)
-			throw new IllegalArgumentException("fromIndex is larger than toIndex ");
+				 new IllegalArgumentException("fromIndex is larger than toIndex ");
 		
 		List<E> link = new MiniVector<>();
     	for(int i = fromIndex; i < toIndex; ++i){
@@ -196,7 +203,12 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 
 		return String.valueOf(builder.append("]"));
 	}
-
+	//Java's clone is broken so this is just an method that
+	//calls and returns the copy constructor.  
+	//@Override
+    public MiniVector<E> clone(){
+    	return new MiniVector<E>(this);
+    }
 	private void throwException(int index) {
 
 		if (index < 0 || index >= size)
@@ -220,7 +232,4 @@ public class MiniVector<E> extends AbstractList<E> implements List<E>,
 			copy(target, original, ++position, size);
 		}
 	}
-
-	
-
 }
