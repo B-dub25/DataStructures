@@ -155,6 +155,12 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
     	// wasn't in the list
     	return false;
     }
+    
+    public boolean removeLastOccurenceOf(Object o){
+    	
+    	
+    	return false;
+    }
 	@Override
 	public E poll() {
 		// protect if the list is a list of objects
