@@ -1,5 +1,7 @@
 import java.io.Serializable;
 import java.util.AbstractSequentialList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -56,7 +58,18 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			runner.previous = temp;
 		}
 	}
-
+	@Override
+    public boolean addAll(Collection<? extends E> c){
+    	
+		if(c == null)
+			return false;
+		
+		Iterator<? extends E> iter = c.iterator();
+		while(iter.hasNext())
+			  addLast(iter.next());
+    	return true;
+    	
+    }
 	public void addFirst(E e) {
 
 		if (head == null)
@@ -112,7 +125,13 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return null;
 	}
-
+	@Override
+    public void clear(){
+    	
+		head = null;
+		last = null;
+		System.gc();
+    }
 	@Override
 	public ListIterator<E> listIterator(int index) {
 
@@ -146,6 +165,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		list.add(0,1);
 		list.add(1,2);
 		list.add(1,3);
+		
 		System.out.println(list.pop());
 		System.out.println(list.pop());
 		System.out.println(list.pop());
