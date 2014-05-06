@@ -134,7 +134,27 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		head = head.next;
 		return temp;
 	}
-
+    public boolean removeFirstOccurenceOf(Object o){
+    	
+    	if(head == null)
+    		return false;
+    	// is it the first one
+    	if(head.type.equals(o)){
+    		remove();
+    		return true;
+    	}
+    	Node<E> runner = head;
+    	while(runner != null)
+    	      if(runner.type.equals(o)){
+    	    	  runner.previous.next = runner.next;
+     	    	  runner = runner.next;
+     	    	  return true;
+    	      }
+    	      else
+    	    	  runner = runner.next;
+    	// wasn't in the list
+    	return false;
+    }
 	@Override
 	public E poll() {
 		// protect if the list is a list of objects
@@ -191,7 +211,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return (last == null) ? null : last.type;
 	}
-
+    
 	@Override
 	public boolean contains(Object o) {
 
@@ -248,4 +268,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 	}
 
+	
 }
