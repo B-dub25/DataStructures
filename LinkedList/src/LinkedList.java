@@ -58,18 +58,20 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			runner.previous = temp;
 		}
 	}
+
 	@Override
-    public boolean addAll(Collection<? extends E> c){
-    	
-		if(c == null)
+	public boolean addAll(Collection<? extends E> c) {
+
+		if (c == null)
 			return false;
-		
+
 		Iterator<? extends E> iter = c.iterator();
-		while(iter.hasNext())
-			  addLast(iter.next());
-    	return true;
-    	
-    }
+		while (iter.hasNext())
+			addLast(iter.next());
+		return true;
+
+	}
+
 	public void addFirst(E e) {
 
 		if (head == null)
@@ -83,51 +85,50 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		add(e);
 	}
 
-
 	@Override
 	public boolean offer(E e) {
 		addLast(e);
 		return true;
 	}
-	
-    public boolean offerFirst(E e){
-    
-    	addFirst(e);
-    	return true;
-    }
-    
-    public boolean offerLast(E e){
-        
-    	addLast(e);
-    	return true;
-    }	
-    
+
+	public boolean offerFirst(E e) {
+
+		addFirst(e);
+		return true;
+	}
+
+	public boolean offerLast(E e) {
+
+		addLast(e);
+		return true;
+	}
+
 	public E pop() throws NoSuchElementException {
 
 		if (head == null)
 			throw new NoSuchElementException();
-		
+
 		final E temp = head.type;
 		head = head.next;
 		return temp;
 	}
-    
+
 	public E get(int index) {
-	
-		if(index < 0 || index > size)
+
+		if (index < 0 || index > size)
 			throw new IndexOutOfBoundsException();
-		
+
 		Node<E> runner = head;
-		for(int i = 0; i < index; ++i)
-			 runner = runner.next;
-		
+		for (int i = 0; i < index; ++i)
+			runner = runner.next;
+
 		return runner.type;
 	}
 
-    @Override
+	@Override
 	public E remove() {
 
-		if(head == null)
+		if (head == null)
 			throw new NoSuchElementException("empty list");
 		final E temp = head.type;
 		head = head.next;
@@ -136,75 +137,96 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	@Override
 	public E poll() {
-		//protect if the list is a list of objects 
+		// protect if the list is a list of objects
 		final E temp;
-		
-		if(head == null)
+
+		if (head == null)
 			temp = null;
-		else{
+		else {
 			temp = head.type;
 			head = head.next;
 		}
-	return temp;
-		
+		return temp;
+
+	}
+
+	public E pollFirst() {
+
+		return poll();
+	}
+
+	public E pollLast() {
+
+		final E temp;
+
+		if (head == null)
+			temp = null;
+		else {
+			temp = last.type;
+			last = last.previous;
+		}
+		return temp;
 	}
 
 	@Override
 	public E element() {
-		
-		if(head == null)
+
+		if (head == null)
 			throw new NoSuchElementException("empty list");
 		final E temp = head.type;
-	return temp;
+		return temp;
 	}
 
 	@Override
 	public E peek() {
-   
-	   	return (head == null) ? null : head.type;
+
+		return (head == null) ? null : head.type;
 	}
-	
-	public E peekFirst(){
+
+	public E peekFirst() {
 		return peek();
 	}
-	
-	public E peekLast(){
-		
-		return (last == null ) ? null :  last.type ;
+
+	public E peekLast() {
+
+		return (last == null) ? null : last.type;
 	}
+
 	@Override
-	public boolean contains(Object o){
-		
+	public boolean contains(Object o) {
+
 		Node<E> frontRunner = head;
 		Node<E> backRunner = last;
-		
-		while(frontRunner != null)
-			  if(frontRunner.type.equals(o) || backRunner.type.equals(o))
-				  return true;
-			  else{
-				  // should bring worst case to be O(n/2) I'll look into a better way to do this  
-				  if(frontRunner == backRunner)
-					  return false;
-				  frontRunner = frontRunner.next;
-				  backRunner = backRunner.previous;
-			      }
-		
+
+		while (frontRunner != null)
+			if (frontRunner.type.equals(o) || backRunner.type.equals(o))
+				return true;
+			else {
+				// should bring worst case to be O(n/2) I'll look into a better
+				// way to do this
+				if (frontRunner == backRunner)
+					return false;
+				frontRunner = frontRunner.next;
+				backRunner = backRunner.previous;
+			}
+
 		return false;
 	}
-	
+
 	@Override
-    public void clear(){
-    	
+	public void clear() {
+
 		head = null;
 		last = null;
 		System.gc();
-    }
+	}
+
 	@Override
 	public ListIterator<E> listIterator(int index) {
 
 		return null;
 	}
-    
+
 	@Override
 	public int size() {
 
@@ -226,5 +248,4 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 	}
 
-	
 }
