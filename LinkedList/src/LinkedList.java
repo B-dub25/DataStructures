@@ -92,39 +92,84 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		head = head.next;
 		return temp;
 	}
-
-	public E get() {
-		return last.type;
+    
+	public E get(int index) {
+	
+		if(index < 0 || index > size)
+			throw new IndexOutOfBoundsException();
+		
+		Node<E> runner = head;
+		for(int i = 0; i < index; ++i)
+			 runner = runner.next;
+		
+		return runner.type;
 	}
 
 	@Override
 	public boolean offer(E e) {
-
-		return false;
+		addLast(e);
+		return true;
 	}
 
 	@Override
 	public E remove() {
 
-		return null;
+		if(head == null)
+			throw new NoSuchElementException("empty list");
+		final E temp = head.type;
+		head = head.next;
+		return temp;
 	}
 
 	@Override
 	public E poll() {
-
-		return null;
+		//protect if the list is a list of objects 
+		final E temp;
+		
+		if(head == null)
+			temp = null;
+		else{
+			temp = head.type;
+			head = head.next;
+		}
+	return temp;
+		
 	}
 
 	@Override
 	public E element() {
-		return null;
+		
+		if(head == null)
+			throw new NoSuchElementException("empty list");
+		final E temp = head.type;
+	return temp;
 	}
 
 	@Override
 	public E peek() {
-
+         
 		return null;
 	}
+	@Override
+	public boolean contains(Object o){
+		
+		Node<E> frontRunner = head;
+		Node<E> backRunner = last;
+		
+		while(frontRunner != null)
+			  if(frontRunner.type.equals(o) || backRunner.type.equals(o))
+				  return true;
+			  else{
+				  // should bring worst case to be O(n/2) I'll look into a better way to do this  
+				  if(frontRunner == backRunner)
+					  return false;
+				  frontRunner = frontRunner.next;
+				  backRunner = backRunner.previous;
+			      }
+		
+		return false;
+	}
+	
 	@Override
     public void clear(){
     	
@@ -137,7 +182,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return null;
 	}
-
+    
 	@Override
 	public int size() {
 
@@ -159,16 +204,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 	}
 
-	public static void main(String[] args) {
-
-		LinkedList<Integer> list = new LinkedList<>();
-		list.add(0,1);
-		list.add(1,2);
-		list.add(1,3);
-		
-		System.out.println(list.pop());
-		System.out.println(list.pop());
-		System.out.println(list.pop());
-
-	}
+	
 }
