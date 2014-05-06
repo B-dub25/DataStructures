@@ -83,6 +83,25 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		add(e);
 	}
 
+
+	@Override
+	public boolean offer(E e) {
+		addLast(e);
+		return true;
+	}
+	
+    public boolean offerFirst(E e){
+    
+    	addFirst(e);
+    	return true;
+    }
+    
+    public boolean offerLast(E e){
+        
+    	addLast(e);
+    	return true;
+    }	
+    
 	public E pop() throws NoSuchElementException {
 
 		if (head == null)
@@ -105,13 +124,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		return runner.type;
 	}
 
-	@Override
-	public boolean offer(E e) {
-		addLast(e);
-		return true;
-	}
-
-	@Override
+    @Override
 	public E remove() {
 
 		if(head == null)
@@ -147,8 +160,17 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	@Override
 	public E peek() {
-         
-		return null;
+   
+	   	return (head == null) ? null : head.type;
+	}
+	
+	public E peekFirst(){
+		return peek();
+	}
+	
+	public E peekLast(){
+		
+		return (last == null ) ? null :  last.type ;
 	}
 	@Override
 	public boolean contains(Object o){
@@ -190,7 +212,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	}
 
 	@SuppressWarnings("hiding")
-	private class Node<E> {
+	private final class Node<E> {
 
 		private E type;
 		private Node<E> next;
