@@ -125,6 +125,22 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		return runner.type;
 	}
 
+	public E getFirst() {
+
+		if (head == null)
+			throw new NoSuchElementException("Empty list");
+		final E element = head.type;
+		return element;
+	}
+
+	public E getLast() {
+
+		if (head == null)
+			throw new NoSuchElementException("empty list");
+		final E element = last.type;
+		return element;
+	}
+
 	@Override
 	public E remove() {
 
@@ -133,6 +149,21 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		final E temp = head.type;
 		head = head.next;
 		return temp;
+	}
+
+	public E removeFirst() throws NoSuchElementException {
+
+		return pop();
+	}
+
+	public E removeLast() {
+
+		if (head == null)
+			throw new NoSuchElementException("empty list");
+		final E element = last.type;
+		last = last.previous;
+		last.next = null;
+		return element;
 	}
 
 	public boolean removeFirstOccurenceOf(Object o) {
@@ -158,32 +189,30 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	public boolean removeLastOccurenceOf(Object o) {
 
-		if(head == null)
+		if (head == null)
 			return false;
-		else{
+		else {
 			Node<E> firstRunner = head;
 			Node<E> secondRunner = null;
-			
-			while(firstRunner != null)
-				 if(firstRunner.type.equals(o)){
-					 secondRunner = firstRunner;
-					 firstRunner = firstRunner.next;
-				 }
-				 else
-					 firstRunner = firstRunner.next;
-			
-		    // was no in the list
-			if(secondRunner == null)
+
+			while (firstRunner != null)
+				if (firstRunner.type.equals(o)) {
+					secondRunner = firstRunner;
+					firstRunner = firstRunner.next;
+				} else
+					firstRunner = firstRunner.next;
+
+			// was no in the list
+			if (secondRunner == null)
 				return false;
-			if(secondRunner == head){
-				 pop();				
-			}
-			else{
+			if (secondRunner == head) {
+				pop();
+			} else {
 				secondRunner.previous.next = secondRunner.next;
 				secondRunner = secondRunner.next;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -302,13 +331,14 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<>();
 		list.add(1);
-		list.add(1);
+		list.add(2);
 		list.add(2);
 		list.add(3);
-		list.removeLastOccurenceOf(1);
+		list.removeLast();
 		System.out.println(list.pop());
 		System.out.println(list.pop());
 		System.out.println(list.pop());
-		
+		System.out.println(list.pop());
+
 	}
 }
