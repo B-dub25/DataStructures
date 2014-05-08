@@ -168,23 +168,20 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	public boolean removeFirstOccurenceOf(Object o) {
 
-		if (head == null)
-			return false;
-		// is it the first one
-		if (head.type.equals(o)) {
-			remove();
-			return true;
-		}
 		Node<E> runner = head;
-		while (runner != null)
-			if (runner.type.equals(o)) {
-				runner.previous.next = runner.next;
-				runner = runner.next;
-				return true;
-			} else
-				runner = runner.next;
-		// wasn't in the list
-		return false;
+		if (runner != null && runner.type.equals(o)) {
+			remove();
+		} else {
+			while (runner != null)
+				if (runner.type.equals(o)) {
+					runner.previous.next = runner.next;
+					runner = runner.next;
+					break;
+				} else
+					runner = runner.next;
+			// wasn't in the list
+		}
+		return runner != null;
 	}
 
 	public boolean removeLastOccurenceOf(Object o) {
@@ -328,17 +325,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 	}
 
-	public static void main(String[] args) {
-		LinkedList<Integer> list = new LinkedList<>();
-		list.add(1);
-		list.add(2);
-		list.add(2);
-		list.add(3);
-		list.removeLast();
-		System.out.println(list.pop());
-		System.out.println(list.pop());
-		System.out.println(list.pop());
-		System.out.println(list.pop());
-
-	}
+	
 }
