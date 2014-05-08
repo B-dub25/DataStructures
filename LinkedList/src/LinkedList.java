@@ -134,33 +134,59 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		head = head.next;
 		return temp;
 	}
-    public boolean removeFirstOccurenceOf(Object o){
-    	
-    	if(head == null)
-    		return false;
-    	// is it the first one
-    	if(head.type.equals(o)){
-    		remove();
-    		return true;
-    	}
-    	Node<E> runner = head;
-    	while(runner != null)
-    	      if(runner.type.equals(o)){
-    	    	  runner.previous.next = runner.next;
-     	    	  runner = runner.next;
-     	    	  return true;
-    	      }
-    	      else
-    	    	  runner = runner.next;
-    	// wasn't in the list
-    	return false;
-    }
-    
-    public boolean removeLastOccurenceOf(Object o){
-    	
-    	
-    	return false;
-    }
+
+	public boolean removeFirstOccurenceOf(Object o) {
+
+		if (head == null)
+			return false;
+		// is it the first one
+		if (head.type.equals(o)) {
+			remove();
+			return true;
+		}
+		Node<E> runner = head;
+		while (runner != null)
+			if (runner.type.equals(o)) {
+				runner.previous.next = runner.next;
+				runner = runner.next;
+				return true;
+			} else
+				runner = runner.next;
+		// wasn't in the list
+		return false;
+	}
+
+	public boolean removeLastOccurenceOf(Object o) {
+
+		if(head == null)
+			return false;
+		else{
+			Node<E> firstRunner = head;
+			Node<E> secondRunner = null;
+			
+			while(firstRunner != null)
+				 if(firstRunner.type.equals(o)){
+					 secondRunner = firstRunner;
+					 firstRunner = firstRunner.next;
+				 }
+				 else
+					 firstRunner = firstRunner.next;
+			
+		    // was no in the list
+			if(secondRunner == null)
+				return false;
+			if(secondRunner == head){
+				 pop();				
+			}
+			else{
+				secondRunner.previous.next = secondRunner.next;
+				secondRunner = secondRunner.next;
+			}
+		}
+		
+		return true;
+	}
+
 	@Override
 	public E poll() {
 		// protect if the list is a list of objects
@@ -217,7 +243,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return (last == null) ? null : last.type;
 	}
-    
+
 	@Override
 	public boolean contains(Object o) {
 
@@ -255,7 +281,6 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	@Override
 	public int size() {
-
 		return size;
 	}
 
@@ -274,5 +299,16 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 	}
 
-	
+	public static void main(String[] args) {
+		LinkedList<Integer> list = new LinkedList<>();
+		list.add(1);
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		list.removeLastOccurenceOf(1);
+		System.out.println(list.pop());
+		System.out.println(list.pop());
+		System.out.println(list.pop());
+		
+	}
 }
