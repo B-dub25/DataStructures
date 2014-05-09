@@ -43,11 +43,13 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	@Override
 	public void add(int index, E e) {
 
+		if(index < 0 || index > size)
+			throw new IndexOutOfBoundsException();
 		if (index == 0 || head == null) {
 			addFirst(e);
 		}
 		// Just add it to the end
-		else if (index == size - 1)
+		else if (index == size )
 			addLast(e);
 		else {
 			Node<E> runner = head;
@@ -103,6 +105,24 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		return true;
 	}
 
+	@Override
+	public E set(int index, E e) {
+
+		if (index < 0 || index >= size)
+			throw new IndexOutOfBoundsException("Index " + index + " and Size " + size);
+		Node<E> runner = head;
+		if (index > size / 2) {
+			runner = last;
+			for (int i = size; i > index; ++i)
+				runner = runner.previous;
+		} else
+			for (int i = 1; i < index; ++i)
+				runner = runner.next;
+		final E element = runner.type;
+		runner.type = e;
+		return element;
+	}
+
 	public E pop() throws NoSuchElementException {
 
 		if (head == null)
@@ -115,11 +135,11 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	public E get(int index) {
 
-		if (index < 0 || index > size)
+		if (index < 0 || index > size )
 			throw new IndexOutOfBoundsException();
 
 		Node<E> runner = head;
-		for (int i = 0; i < index; ++i)
+		for (int i = 1; i < index; ++i)
 			runner = runner.next;
 
 		return runner.type;
@@ -269,7 +289,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return (last == null) ? null : last.type;
 	}
-
+    
 	@Override
 	public boolean contains(Object o) {
 
@@ -290,7 +310,20 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return false;
 	}
-
+	public int indexOf(Object o){
+		
+		Node<E> runner = head;
+		for(int i = 0; i < size ; ++i)
+		     if(runner.type.equals(o))
+		    	 return i;
+		     else
+		    	 runner = runner.next;
+		return -1;
+	}
+    @Override
+	public boolean isEmpty(){
+		return head == null;
+	}
 	@Override
 	public void clear() {
 
@@ -309,7 +342,18 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	public int size() {
 		return size;
 	}
-
+	@Override
+    public String toString(){
+		
+    	Node<E> runner = head;
+    	StringBuilder builder = new StringBuilder("[");
+    	while(runner != last){
+    		builder.append(runner.type +", ");
+    		runner = runner.next;
+    	}
+    	return builder.append( runner.type + "]").toString();
+    	
+    }
 	@SuppressWarnings("hiding")
 	private final class Node<E> {
 
@@ -324,6 +368,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			this.next = nextLink;
 		}
 	}
-
-	
+    
 }
