@@ -335,7 +335,6 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		System.gc();
 	}
 
-	@SuppressWarnings({ "unchecked", "null" })
 	@Override
 	public ListIterator<E> listIterator(int index) {
 
@@ -368,7 +367,35 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		return builder.append(runner.type + "]").toString();
 
 	}
+	
+	public boolean equals(Object o){
+		
+		if(o == null)
+			return false;
+		else if( getClass() != o.getClass())
+			  return false;
+		
+		else{
+			Node<E> runner = head;
+			LinkedList<E> otherRunner = (LinkedList<E>)o;
+			
+			if(this.size != otherRunner.size)
+               return false;
+			while(runner != null && otherRunner != null )
+			      if(!runner.type.equals(otherRunner.head.type))
+			    	   return false;
+			      else{
+			    	  runner = runner.next;
+			    	  otherRunner.head = otherRunner.head.next;
+			    	 
+			      }
+		}
+		
+		return true;
+	}
 
+	// TODO add last object to match lists.
+	@SuppressWarnings("hiding")
 	public class Iterator<E> implements ListIterator<E> {
 
 		private Node<E> iterator;
@@ -409,7 +436,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			final E element = iterator.previous.type;
 			iterator = iterator.previous;
 			--index;
-			// TODO Auto-generated method stub
+
 			return element;
 		}
 
@@ -417,8 +444,8 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		public int nextIndex() {
 			if (iterator == last)
 				return size;
-			
-			return index+1;
+
+			return index + 1;
 		}
 
 		@Override
@@ -434,7 +461,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		public void remove() {
 			if (iterator == head)
 				iterator = iterator.next;
-			else{
+			else {
 				iterator.previous.next = iterator.next;
 				iterator = iterator.next;
 				--size;
@@ -449,8 +476,8 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		@Override
 		public void add(E e) {
-		  iterator = new Node<E>(e, null, iterator);
-		  ++size;
+			iterator = new Node<E>(e, null, iterator);
+			++size;
 		}
 
 	}
@@ -475,6 +502,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			type = n.type;
 		}
 	}
-
 	
 }
