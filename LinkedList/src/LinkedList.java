@@ -1,7 +1,6 @@
 import java.io.Serializable;
 import java.util.AbstractSequentialList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -67,7 +66,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		if (c == null)
 			return false;
 
-		Iterator<? extends E> iter = c.iterator();
+		Iterator<? extends E> iter = (Iterator<? extends E>) c.iterator();
 		while (iter.hasNext())
 			addLast(iter.next());
 		return true;
@@ -336,19 +335,20 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		System.gc();
 	}
 
+	@SuppressWarnings({ "unchecked", "null" })
 	@Override
 	public ListIterator<E> listIterator(int index) {
 
-		if (index > 0 || index > size)
+		if (index < 0 || index > size)
 			throw new IndexOutOfBoundsException("Index " + index + " Size "
 					+ size);
-		Iterator<E> iter = null;
-		if (index > size / 2) {
+		Iterator<E> iter = new Iterator<>();
+		if (index >= size / 2) {
 			iter.iterator = last;
 			for (int i = size; i > index; --i)
-				   iter.iterator = iter.iterator.previous;
+				iter.iterator = iter.iterator.previous;
 		}
-		return iter;
+		return (ListIterator<E>) iter;
 	}
 
 	@Override
@@ -369,6 +369,92 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	}
 
+	public class Iterator<E> implements ListIterator<E> {
+
+		private Node<E> iterator;
+		private int index = 0;
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		public Iterator() {
+			index = 0;
+			iterator = new Node(head);
+		}
+
+		@Override
+		public boolean hasNext() {
+			return iterator != null;
+		}
+
+		@Override
+		public E next() {
+
+			if (iterator == null)
+				throw new NoSuchElementException();
+
+			final E element = iterator.type;
+			iterator = iterator.next;
+			index++;
+			return element;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			return index != 0;
+		}
+
+		@Override
+		public E previous() {
+			if (index == 0)
+				throw new NoSuchElementException();
+			final E element = iterator.previous.type;
+			iterator = iterator.previous;
+			--index;
+			// TODO Auto-generated method stub
+			return element;
+		}
+
+		@Override
+		public int nextIndex() {
+			if (iterator == last)
+				return size;
+			
+			return index+1;
+		}
+
+		@Override
+		public int previousIndex() {
+
+			if (iterator == head)
+				return -1;
+
+			return index - 1;
+		}
+
+		@Override
+		public void remove() {
+			if (iterator == head)
+				iterator = iterator.next;
+			else{
+				iterator.previous.next = iterator.next;
+				iterator = iterator.next;
+				--size;
+			}
+
+		}
+
+		@Override
+		public void set(E e) {
+			iterator.type = e;
+		}
+
+		@Override
+		public void add(E e) {
+		  iterator = new Node<E>(e, null, iterator);
+		  ++size;
+		}
+
+	}
+
 	@SuppressWarnings("hiding")
 	private final class Node<E> {
 
@@ -382,66 +468,13 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			this.previous = past;
 			this.next = nextLink;
 		}
+
+		private Node(Node<E> n) {
+			next = n.next;
+			previous = n.previous;
+			type = n.type;
+		}
 	}
 
-	public class Iterator<E> implements ListIterator<E> {
-
-		private Node<E> iterator;
-
-		@Override
-		public boolean hasNext() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public E next() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean hasPrevious() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public E previous() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int nextIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int previousIndex() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public void remove() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void set(E e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void add(E e) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
+	
 }
