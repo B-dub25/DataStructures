@@ -43,13 +43,13 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	@Override
 	public void add(int index, E e) {
 
-		if(index < 0 || index > size)
+		if (index < 0 || index > size)
 			throw new IndexOutOfBoundsException();
 		if (index == 0 || head == null) {
 			addFirst(e);
 		}
 		// Just add it to the end
-		else if (index == size )
+		else if (index == size)
 			addLast(e);
 		else {
 			Node<E> runner = head;
@@ -109,7 +109,8 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	public E set(int index, E e) {
 
 		if (index < 0 || index >= size)
-			throw new IndexOutOfBoundsException("Index " + index + " and Size " + size);
+			throw new IndexOutOfBoundsException("Index " + index + " and Size "
+					+ size);
 		Node<E> runner = head;
 		if (index > size / 2) {
 			runner = last;
@@ -135,7 +136,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	public E get(int index) {
 
-		if (index < 0 || index > size )
+		if (index < 0 || index > size)
 			throw new IndexOutOfBoundsException();
 
 		Node<E> runner = head;
@@ -289,7 +290,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return (last == null) ? null : last.type;
 	}
-    
+
 	@Override
 	public boolean contains(Object o) {
 
@@ -310,20 +311,23 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 		return false;
 	}
-	public int indexOf(Object o){
-		
+
+	public int indexOf(Object o) {
+
 		Node<E> runner = head;
-		for(int i = 0; i < size ; ++i)
-		     if(runner.type.equals(o))
-		    	 return i;
-		     else
-		    	 runner = runner.next;
+		for (int i = 0; i < size; ++i)
+			if (runner.type.equals(o))
+				return i;
+			else
+				runner = runner.next;
 		return -1;
 	}
-    @Override
-	public boolean isEmpty(){
+
+	@Override
+	public boolean isEmpty() {
 		return head == null;
 	}
+
 	@Override
 	public void clear() {
 
@@ -335,25 +339,36 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 	@Override
 	public ListIterator<E> listIterator(int index) {
 
-		return null;
+		if (index > 0 || index > size)
+			throw new IndexOutOfBoundsException("Index " + index + " Size "
+					+ size);
+		Iterator<E> iter = null;
+		if (index > size / 2) {
+			iter.iterator = last;
+			for (int i = size; i > index; --i)
+				   iter.iterator = iter.iterator.previous;
+		}
+		return iter;
 	}
 
 	@Override
 	public int size() {
 		return size;
 	}
+
 	@Override
-    public String toString(){
-		
-    	Node<E> runner = head;
-    	StringBuilder builder = new StringBuilder("[");
-    	while(runner != last){
-    		builder.append(runner.type +", ");
-    		runner = runner.next;
-    	}
-    	return builder.append( runner.type + "]").toString();
-    	
-    }
+	public String toString() {
+
+		Node<E> runner = head;
+		StringBuilder builder = new StringBuilder("[");
+		while (runner != last) {
+			builder.append(runner.type + ", ");
+			runner = runner.next;
+		}
+		return builder.append(runner.type + "]").toString();
+
+	}
+
 	@SuppressWarnings("hiding")
 	private final class Node<E> {
 
@@ -368,5 +383,65 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			this.next = nextLink;
 		}
 	}
-    
+
+	public class Iterator<E> implements ListIterator<E> {
+
+		private Node<E> iterator;
+
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public E next() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public E previous() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public int nextIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int previousIndex() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void set(E e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void add(E e) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
 }
