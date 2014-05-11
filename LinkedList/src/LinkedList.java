@@ -367,30 +367,30 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		return builder.append(runner.type + "]").toString();
 
 	}
-	
-	public boolean equals(Object o){
-		
-		if(o == null)
+
+	 @SuppressWarnings("unchecked")
+	public boolean equals(Object o) {
+
+		if (o == null)
 			return false;
-		else if( getClass() != o.getClass())
-			  return false;
-		
-		else{
+		else if (getClass() != o.getClass())
+			return false;
+
+		else if (this.size != ((LinkedList<E>) o).size)
+			return false;
+		else {
 			Node<E> runner = head;
-			LinkedList<E> otherRunner = (LinkedList<E>)o;
+			Node<E> otherRunner = (Node<E>) o;
 			
-			if(this.size != otherRunner.size)
-               return false;
-			while(runner != null && otherRunner != null )
-			      if(!runner.type.equals(otherRunner.head.type))
-			    	   return false;
-			      else{
-			    	  runner = runner.next;
-			    	  otherRunner.head = otherRunner.head.next;
-			    	 
-			      }
+			while (runner != null && otherRunner != null)
+				if (!runner.type.equals(otherRunner.type))
+					return false;
+				else {
+					runner = runner.next;
+					otherRunner = otherRunner.next;
+				}
 		}
-		
+
 		return true;
 	}
 
@@ -502,5 +502,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			type = n.type;
 		}
 	}
-	
+
 }
