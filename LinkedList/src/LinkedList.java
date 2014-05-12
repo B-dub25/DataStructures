@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.AbstractSequentialList;
 import java.util.Collection;
 import java.util.List;
@@ -10,13 +11,15 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		List<E>, Serializable, Cloneable, Queue<E> {
 
 	/**
+	 * All private methods and classes are located at bottom of file
 	 * Computed serial ID
 	 */
 	private static final long serialVersionUID = 7532946786315141316L;
+	private static final int prime = 53;
 	private Node<E> head;
 	private Node<E> last;
 	private int size;
-
+	private Object unsigned;
 	public LinkedList() {
 
 		head = null;
@@ -368,7 +371,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 
 	}
 
-	 @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object o) {
 
 		if (o == null)
@@ -381,7 +384,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		else {
 			Node<E> runner = head;
 			Node<E> otherRunner = (Node<E>) o;
-			
+
 			while (runner != null && otherRunner != null)
 				if (!runner.type.equals(otherRunner.type))
 					return false;
@@ -390,10 +393,21 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 					otherRunner = otherRunner.next;
 				}
 		}
-
 		return true;
 	}
 
+	@Override
+	public int hashCode() {
+		
+		int hash = 1;
+		Node<E> runner = head;
+		while(runner != null){
+		  hash *= (int)(hash ^ computeValue(runner.type) << 2 ^prime);
+		  runner = runner.next;
+		}
+		return hash;
+	}
+    
 	// TODO add last object to match lists.
 	@SuppressWarnings("hiding")
 	public class Iterator<E> implements ListIterator<E> {
@@ -481,7 +495,14 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 
 	}
-
+    private long computeValue(E e){
+    	
+    	String holder = String.valueOf(e);
+    	long hash = 1;
+    	for(int i = 0 ; i < holder.length(); ++i)
+    	          hash +=( (Math.pow(Integer.valueOf(holder.charAt(i)) , i) * prime));
+    	return hash % holder.length();
+    }
 	@SuppressWarnings("hiding")
 	private final class Node<E> {
 
@@ -503,4 +524,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		}
 	}
 
+	
 }
