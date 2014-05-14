@@ -402,7 +402,7 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 		int hash = 1;
 		Node<E> runner = head;
 		while(runner != null){
-		  hash *= (int)(hash ^ computeValue(runner.type) << 2 ^prime);
+		  hash *= (int) (computeValue(runner.type) ^ hash << prime);
 		  runner = runner.next;
 		}
 		return hash;
@@ -499,9 +499,10 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
     	
     	String holder = String.valueOf(e);
     	long hash = 1;
-    	for(int i = 0 ; i < holder.length(); ++i)
-    	          hash +=( (Math.pow(Integer.valueOf(holder.charAt(i)) , i) * prime));
-    	return hash % holder.length();
+    	for(int i = 0 ; i < holder.length()/2; ++i)
+    	          hash *=( holder.charAt(i) * prime ) ;
+    	
+    	return hash * prime;
     }
 	@SuppressWarnings("hiding")
 	private final class Node<E> {
@@ -523,6 +524,5 @@ public class LinkedList<E> extends AbstractSequentialList<E> implements
 			type = n.type;
 		}
 	}
-
 	
 }
